@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ariyan Hosseini - Tech Innovator shaping the future with a human touch.">
+    <title>Ariyan Hosseini | Tech Innovator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Orbitron', sans-serif; 
+            background: #0a0a0a; 
+            color: #fff; 
+            line-height: 1.6; 
+            overflow-x: hidden; 
+            position: relative; 
+            transition: background 0.5s ease, color 0.5s ease; 
+        }
+        body.light-mode { 
+            background: #FFFFFF; /* سفید خالص */
+            color: #333; 
+        }
+        #particles-dark, #particles-light { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        #particles-dark { display: block; }
+        #particles-light { display: none; }
+        body.light-mode #particles-dark { display: none; }
+        body.light-mode #particles-light { display: block; }
+
+        /* Loader */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; transition: opacity 0.8s ease-out; }
+        #loader.hidden { opacity: 0; pointer-events: none; }
+        .loader-text { font-size: 2.5em; font-weight: 900; background: linear-gradient(135deg, #FFD700, #00FFFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: pulse 1.8s infinite; text-shadow: 0 0 20px rgba(255, 215, 0, 0.6); }
+
+        /* Theme Toggle Button */
+        .theme-toggle { position: fixed; top: 20px; right: 20px; width: 50px; height: 50px; background: linear-gradient(135deg, #FFD700, #00FFFF); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; transition: transform 0.3s ease; }
+        .theme-toggle:hover { transform: scale(1.1); }
+        .theme-toggle i { color: #fff; font-size: 1.8em; }
+
+        /* Header */
+        .header { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        .nav { position: fixed; top: 0; width: 100%; padding: 40px 150px; display: flex; justify-content: space-between; align-items: center; z-index: 100; transition: all 0.5s ease; }
+        .nav.scrolled { background: rgba(10, 10, 10, 0.9); padding: 30px 150px; box-shadow: 0 5px 40px rgba(255, 215, 0, 0.3); }
+        body.light-mode .nav.scrolled { background: rgba(255, 255, 255, 0.9); box-shadow: 0 5px 40px rgba(0, 0, 0, 0.1); }
+        .nav .logo-container { position: relative; width: 90px; height: 90px; }
+        .nav .space-logo { width: 100%; height: 100%; background: radial-gradient(circle, #FFD700 40%, #00FFFF 80%); border-radius: 50%; box-shadow: 0 0 35px rgba(255, 215, 0, 0.7); animation: spin 5s linear infinite; }
+        .nav .space-logo:hover { transform: scale(1.15); box-shadow: 0 0 60px rgba(0, 255, 255, 0.7); }
+        .nav ul { list-style: none; display: flex; gap: 100px; }
+        .nav a { color: #fff; text-decoration: none; font-weight: 700; font-size: 1.6em; position: relative; transition: all 0.4s ease; text-shadow: 0 0 10px rgba(0, 255, 255, 0.5); font-family: 'Inter', sans-serif; }
+        body.light-mode .nav a { color: #333; text-shadow: none; }
+        .nav a::after { content: ''; position: absolute; width: 0; height: 4px; bottom: -12px; left: 50%; background: #FFD700; transition: width 0.4s ease, left 0.4s ease; transform: translateX(-50%); box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+        .nav a:hover::after { width: 100%; left: 0; transform: translateX(0); }
+        .nav a:hover { color: #FFD700; text-shadow: 0 0 20px #FFD700; transform: translateY(-4px); }
+        .header-content { text-align: center; z-index: 10; }
+        .header-content h1 { font-size: 8.5em; font-weight: 900; background: linear-gradient(135deg, #FFD700, #00FFFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: wave 4s infinite; text-shadow: 0 0 40px rgba(255, 215, 0, 0.7); }
+        body.light-mode .header-content h1 { text-shadow: 0 0 20px rgba(0, 0, 0, 0.3); }
+        .header-content p { font-size: 3em; color: #e0e0e0; margin-top: 25px; font-weight: 700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.6); font-family: 'Inter', sans-serif; }
+        body.light-mode .header-content p { color: #666; text-shadow: none; }
+        .header-content .tagline { font-size: 1.8em; color: #ccc; margin-top: 25px; font-style: italic; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+        body.light-mode .header-content .tagline { color: #888; text-shadow: none; }
+        .cta-btn { display: inline-block; margin-top: 60px; padding: 22px 65px; background: linear-gradient(135deg, #FFD700, #00FFFF); color: #fff; text-decoration: none; font-weight: 700; font-size: 1.4em; border-radius: 50px; transition: all 0.5s ease; box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); font-family: 'Inter', sans-serif; }
+        body.light-mode .cta-btn { color: #333; }
+        .cta-btn:hover { transform: scale(1.1); box-shadow: 0 0 50px rgba(0, 255, 255, 0.7); }
+
+        /* Sections */
+        .section { padding: 220px 150px; position: relative; z-index: 10; background: rgba(20, 20, 20, 0.4); backdrop-filter: blur(15px); border-radius: 30px; margin: 60px 0; border: 1px solid rgba(255, 215, 0, 0.2); }
+        body.light-mode .section { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.1); }
+        .section h2 { font-size: 5.5em; font-weight: 700; text-align: center; background: linear-gradient(135deg, #FFD700, #00FFFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 100px; text-shadow: 0 0 30px rgba(255, 215, 0, 0.6); opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
+        body.light-mode .section h2 { text-shadow: 0 0 20px rgba(0, 0, 0, 0.3); }
+        .section.visible h2 { opacity: 1; transform: translateY(0); }
+        .timeline { max-width: 1600px; margin: 0 auto; position: relative; }
+        .timeline::before { content: ''; position: absolute; top: 0; left: 50%; width: 6px; height: 100%; background: #FFD700; transform: translateX(-50%); box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+        body.light-mode .timeline::before { background: #00FFFF; box-shadow: 0 0 20px rgba(0, 255, 255, 0.5); }
+        .timeline-item { display: flex; align-items: center; margin-bottom: 90px; position: relative; opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
+        .timeline-item.visible { opacity: 1; transform: translateY(0); }
+        .timeline-item:nth-child(even) { flex-direction: row-reverse; }
+        .timeline-item .card { background: rgba(30, 30, 30, 0.9); border-radius: 30px; padding: 50px; width: 45%; transition: all 0.5s ease; box-shadow: 0 20px 50px rgba(255, 215, 0, 0.2); border: 2px solid rgba(0, 255, 255, 0.3); }
+        body.light-mode .timeline-item .card { background: rgba(255, 255, 255, 0.9); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1); border: 2px solid rgba(0, 255, 255, 0.2); }
+        .timeline-item .card:hover { transform: translateY(-15px); box-shadow: 0 30px 70px rgba(0, 255, 255, 0.4); border-color: #FFD700; }
+        .timeline-item .card h3 { font-size: 2.5em; color: #FFD700; margin-bottom: 20px; text-shadow: 0 0 15px rgba(255, 215, 0, 0.5); font-family: 'Inter', sans-serif; }
+        body.light-mode .timeline-item .card h3 { color: #00FFFF; text-shadow: none; }
+        .timeline-item .card p { font-size: 1.5em; color: #d0d0d0; text-shadow: 0 0 10px rgba(0, 255, 255, 0.4); }
+        body.light-mode .timeline-item .card p { color: #666; text-shadow: none; }
+        .timeline-item .card .pre-title { font-size: 1.3em; color: #888; margin-bottom: 15px; text-shadow: 0 0 5px rgba(255, 215, 0, 0.3); }
+        body.light-mode .timeline-item .card .pre-title { color: #999; text-shadow: none; }
+
+        /* Skills Section with Interactive Animation */
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 50px; max-width: 1800px; margin: 0 auto; }
+        .skill-card { background: rgba(30, 30, 30, 0.9); border-radius: 30px; padding: 50px; text-align: center; transition: all 0.5s ease; opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; box-shadow: 0 20px 50px rgba(0, 255, 255, 0.2); border: 2px solid rgba(255, 215, 0, 0.3); position: relative; }
+        body.light-mode .skill-card { background: rgba(255, 255, 255, 0.9); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1); border: 2px solid rgba(0, 255, 255, 0.2); }
+        .skill-card.visible { opacity: 1; transform: translateY(0); }
+        .skill-card:hover { transform: perspective(1000px) rotateX(10deg) rotateY(10deg) translateY(-10px); box-shadow: 0 30px 70px rgba(0, 255, 255, 0.4); border-color: #00FFFF; }
+        .skill-card h3 { font-size: 2em; color: #00FFFF; margin-bottom: 25px; text-shadow: 0 0 15px rgba(0, 255, 255, 0.5); font-family: 'Inter', sans-serif; transition: transform 0.3s ease; }
+        body.light-mode .skill-card h3 { color: #FFD700; text-shadow: none; }
+        .skill-card:hover h3 { transform: scale(1.1); }
+        .skill-card .progress { width: 100%; height: 15px; background: rgba(255, 255, 255, 0.1); border-radius: 8px; overflow: hidden; }
+        .skill-card .progress-bar { height: 100%; background: linear-gradient(135deg, #FFD700, #00FFFF); width: 0; animation: progressFill 2s ease forwards; box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
+
+        /* Back to Top Button */
+        .back-to-top { position: fixed; bottom: 40px; right: 40px; width: 60px; height: 60px; background: linear-gradient(135deg, #FFD700, #00FFFF); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); opacity: 0; transition: opacity 0.3s ease; z-index: 100; animation: pulse 1.5s infinite; }
+        .back-to-top.visible { opacity: 1; }
+        .back-to-top:hover { transform: scale(1.2); box-shadow: 0 0 50px rgba(0, 255, 255, 0.7); }
+        .back-to-top i { color: #fff; font-size: 2em; text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
+
+        /* Footer with Interactive Map */
+        .footer { background: rgba(10, 10, 10, 0.9); padding: 100px 150px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 60px; position: relative; z-index: 10; border-top: 1px solid rgba(255, 215, 0, 0.2); }
+        body.light-mode .footer { background: rgba(255, 255, 255, 0.9); border-top: 1px solid rgba(0, 0, 0, 0.1); }
+        .footer-column { flex: 1; min-width: 280px; padding: 20px; }
+        .footer h2 { font-size: 2.5em; color: #FFD700; margin-bottom: 30px; text-shadow: 0 0 20px rgba(255, 215, 0, 0.6); }
+        body.light-mode .footer h2 { color: #00FFFF; text-shadow: none; }
+        .footer p, .footer a { font-size: 1.4em; color: #d0d0d0; display: flex; align-items: center; gap: 15px; transition: all 0.4s ease; text-shadow: 0 0 10px rgba(0, 255, 255, 0.4); font-family: 'Inter', sans-serif; margin-bottom: 15px; white-space: nowrap; }
+        body.light-mode .footer p, body.light-mode .footer a { color: #666; text-shadow: none; }
+        .footer a:hover { color: #FFD700; transform: translateX(10px); text-shadow: 0 0 20px rgba(255, 215, 0, 0.6); }
+        body.light-mode .footer a:hover { color: #00FFFF; text-shadow: none; }
+        .footer i { transition: transform 0.4s ease; }
+        .footer a:hover i { transform: scale(1.2); }
+        .footer .map-container { width: 100%; height: 200px; border-radius: 15px; overflow: hidden; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+        body.light-mode .footer .map-container { box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); }
+        .footer .qr-code { text-align: center; }
+        .footer .qr-code img { width: 160px; height: 160px; border-radius: 15px; box-shadow: 0 20px 50px rgba(255, 215, 0, 0.3); transition: all 0.5s ease; border: 2px solid rgba(0, 255, 255, 0.3); }
+        body.light-mode .footer .qr-code img { box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1); }
+        .footer .qr-code img:hover { transform: scale(1.1); box-shadow: 0 30px 70px rgba(0, 255, 255, 0.5); }
+        .footer .last-updated { font-size: 1.1em; color: #888; margin-top: 10px; text-shadow: 0 0 5px rgba(255, 215, 0, 0.3); display: block; text-align: center; }
+        body.light-mode .footer .last-updated { color: #999; text-shadow: none; }
+
+        /* Resume Preview Popup */
+        .resume-popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 800px; background: rgba(30, 30, 30, 0.95); padding: 40px; border-radius: 20px; box-shadow: 0 0 50px rgba(255, 215, 0, 0.5); z-index: 2000; }
+        body.light-mode .resume-popup { background: rgba(255, 255, 255, 0.95); box-shadow: 0 0 50px rgba(0, 0, 0, 0.2); }
+        .resume-popup img { width: 100%; border-radius: 10px; }
+        .resume-popup .close-btn { position: absolute; top: 20px; right: 20px; font-size: 2em; color: #FFD700; cursor: pointer; transition: transform 0.3s ease; }
+        body.light-mode .resume-popup .close-btn { color: #00FFFF; }
+        .resume-popup .close-btn:hover { transform: scale(1.2); }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1999; }
+
+        /* Animations */
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes wave { 0% { transform: translateY(0); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0); } }
+        @keyframes progressFill { from { width: 0; } to { width: var(--progress-width); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content h1 { font-size: 5em; }
+            .header-content p { font-size: 2em; }
+            .nav { padding: 20px 50px; }
+            .nav .logo-container { width: 70px; height: 70px; }
+            .nav ul { gap: 40px; font-size: 1.2em; }
+            .section { padding: 120px 50px; margin: 40px 0; }
+            .section h2 { font-size: 3.5em; }
+            .timeline::before { left: 25px; }
+            .timeline-item { flex-direction: column; margin-bottom: 70px; }
+            .timeline-item .card { width: 100%; }
+            .footer { padding: 80px 50px; gap: 40px; }
+            .footer-column { min-width: 100%; padding: 15px; }
+            .back-to-top { width: 50px; height: 50px; bottom: 20px; right: 20px; }
+            .back-to-top i { font-size: 1.5em; }
+            .resume-popup { width: 90%; padding: 20px; }
+        }
+
+        /* PDF Container (مخفی برای دانلود) */
+        #pdf-content { display: none; }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-dark"></div>
+    <div id="particles-light"></div>
+
+    <!-- Loader -->
+    <div id="loader"><span class="loader-text">Loading...</span></div>
+
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle" id="themeToggle"><i data-feather="moon"></i></div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="nav">
+            <div class="logo-container">
+                <div class="space-logo"></div>
+            </div>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#certifications">Certifications</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+        <div class="header-content">
+            <h1>Ariyan Hosseini</h1>
+            <p>Tech Innovator</p>
+            <p class="tagline">"Bringing Life to the Future"</p>
+            <a href="#contact" class="cta-btn">Get in Touch</a>
+        </div>
+    </div>
+
+    <!-- About Me -->
+    <div id="about" class="section">
+        <h2>About Me</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="card">
+                    <p>"I’m a tech enthusiast who loves blending creativity with technology. I’ve improved Python projects by 50%, built 5+ Ethereum smart contracts, and combined Human Intelligence with blockchain to create smart solutions."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills -->
+    <div id="skills" class="section">
+        <h2>Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-card" style="--progress-width: 90%;"><h3>Python</h3><div class="progress"><div class="progress-bar"></div></div></div>
+            <div class="skill-card" style="--progress-width: 85%;"><h3>Front-end Dev</h3><div class="progress"><div class="progress-bar"></div></div></div>
+            <div class="skill-card" style="--progress-width: 80%;"><h3>Solidity</h3><div class="progress"><div class="progress-bar"></div></div></div>
+            <div class="skill-card" style="--progress-width: 85%;"><h3>Blockchain</h3><div class="progress"><div class="progress-bar"></div></div></div>
+            <div class="skill-card" style="--progress-width: 75%;"><h3>Human Intelligence & ML</h3><div class="progress"><div class="progress-bar"></div></div></div>
+            <div class="skill-card" style="--progress-width: 70%;"><h3>Networking</h3><div class="progress"><div class="progress-bar"></div></div></div>
+        </div>
+    </div>
+
+    <!-- Certifications -->
+    <div id="certifications" class="section">
+        <h2>Certifications</h2>
+        <div class="timeline">
+            <div class="timeline-item"><div class="card"><p class="pre-title">2024</p><h3>Python Programming</h3><p>Made projects 40% more efficient.</p></div></div>
+            <div class="timeline-item"><div class="card"><p class="pre-title">2024</p><h3>Advanced Python</h3><p>Created fast apps with 30% better performance.</p></div></div>
+            <div class="timeline-item"><div class="card"><p class="pre-title">2024</p><h3>Network Principles</h3><p>Improved system security.</p></div></div>
+            <div class="timeline-item"><div class="card"><p class="pre-title">2024</p><h3>Front-end Dev</h3><p>Increased user engagement by 20%.</p></div></div>
+            <div class="timeline-item"><div class="card"><p class="pre-title">2024</p><h3>Instagram Marketing</h3><p>Reached 50K+ people in 3 months.</p></div></div>
+            <div class="timeline-item"><div class="card"><p class="pre-title">2024</p><h3>Blockchain Basics</h3><p>Learned the essentials of crypto.</p></div></div>
+            <div class="timeline-item"><div class="card"><p class="pre-title">2025</p><h3>Advanced Blockchain</h3><p>Designed solutions for decentralized finance.</p></div></div>
+            <div class="timeline-item"><div class="card"><p class="pre-title">2025</p><h3>Solidity Dev</h3><p>Launched 5+ smart contracts.</p></div></div>
+        </div>
+    </div>
+
+    <!-- Experience -->
+    <div id="experience" class="section">
+        <h2>Experience</h2>
+        <div class="timeline">
+            <div class="timeline-item"><div class="card"><p class="pre-title">2021-2023</p><h3>Patomat Club</h3><p>Reduced downtime by 25% with tech solutions.</p></div></div>
+            <div class="timeline-item"><div class="card"><p class="pre-title">2023-2024</p><h3>Tax Online</h3><p>Saved over 100 hours with automation.</p></div></div>
+            <div class="timeline-item"><div class="card"><p class="pre-title">2025</p><h3>Arda Technology</h3><p>Kept websites running at 99.9% uptime.</p></div></div>
+        </div>
+    </div>
+
+    <!-- Education -->
+    <div id="education" class="section">
+        <h2>Education</h2>
+        <div class="timeline">
+            <div class="timeline-item"><div class="card"><p class="pre-title">2022-2024</p><h3>Content Production</h3><p>Forsat Shirazi</p></div></div>
+            <div class="timeline-item"><div class="card"><p class="pre-title">2024</p><h3>Software Development</h3><p>Apadana</p></div></div>
+        </div>
+    </div>
+
+    <!-- Interests -->
+    <div id="interests" class="section">
+        <h2>Interests</h2>
+        <div class="skills-grid">
+            <div class="skill-card"><h3><i data-feather="music"></i> Music</h3></div>
+            <div class="skill-card"><h3><i data-feather="book"></i> Books</h3></div>
+            <div class="skill-card"><h3><i data-feather="map"></i> Travel</h3></div>
+            <div class="skill-card"><h3><i data-feather="film"></i> Movies</h3></div>
+        </div>
+    </div>
+
+    <!-- Footer with Map and Resume Download -->
+    <div id="contact" class="footer">
+        <div class="footer-column">
+            <h2>Contact</h2>
+            <p><i data-feather="phone"></i> +989210248214</p>
+            <p><i data-feather="map"></i> Iran, Shiraz</p>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d208025.0940084234!2d52.40401394414913!3d29.616900251149698!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3fb20e7e27d3a397%3A0x816b71beb08a70c5!2sShiraz%2C%20Fars%20Province%2C%20Iran!5e0!3m2!1sen!2sus!4v1698765432100!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+            <p><i data-feather="mail"></i> <a href="mailto:ariyan.hosseini1384@gmail.com">ariyan.hosseini1384@gmail.com</a></p>
+        </div>
+        <div class="footer-column">
+            <h2>Social</h2>
+            <p><a href="https://instagram.com/ariyan_ho"><i data-feather="instagram"></i> @ariyan_ho</a></p>
+            <p><a href="https://linkedin.com/in/ariyan-hosseini"><i data-feather="linkedin"></i> ariyan-hosseini</a></p>
+            <p><a href="https://github.com/ariyanhosseini2005"><i data-feather="github"></i> ariyanhosseini2005</a></p>
+            <p><a href="#" class="downloadBtn"><i data-feather="download"></i> Download Resume</a></p>
+        </div>
+        <div class="footer-column qr-code">
+            <h2>Connect</h2>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://linkedin.com/in/ariyan-hosseini" alt="QR Code">
+            <p class="last-updated">Last Updated: March 2025</p>
+        </div>
+    </div>
+
+    <!-- Resume Popup -->
+    <div class="overlay" id="overlay"></div>
+    <div class="resume-popup" id="resumePopup">
+        <span class="close-btn" id="closePopup">×</span>
+        <img src="https://via.placeholder.com/800x600?text=Resume+Preview" alt="Resume Preview">
+    </div>
+
+    <!-- PDF Content (مخفی برای دانلود) -->
+    <div id="pdf-content">
+        <h1 style="font-size: 40px; text-align: center; color: #FFD700;">Ariyan Hosseini</h1>
+        <p style="font-size: 24px; text-align: center; color: #00FFFF;">Tech Innovator</p>
+        <p style="font-size: 18px; text-align: center; font-style: italic; color: #888;">"Bringing Life to the Future"</p>
+        <hr style="border: 1px solid #FFD700; margin: 20px 0;">
+        <h2 style="font-size: 30px; color: #FFD700;">About Me</h2>
+        <p style="font-size: 16px;">"I’m a tech enthusiast who loves blending creativity with technology. I’ve improved Python projects by 50%, built 5+ Ethereum smart contracts, and combined Human Intelligence with blockchain to create smart solutions."</p>
+        <h2 style="font-size: 30px; color: #FFD700;">Skills</h2>
+        <ul style="font-size: 16px; list-style: none;">
+            <li>Python - 90%</li>
+            <li>Front-end Dev - 85%</li>
+            <li>Solidity - 80%</li>
+            <li>Blockchain - 85%</li>
+            <li>Human Intelligence & ML - 75%</li>
+            <li>Networking - 70%</li>
+        </ul>
+        <h2 style="font-size: 30px; color: #FFD700;">Experience</h2>
+        <p style="font-size: 16px;"><strong>Patomat Club (2021-2023):</strong> Reduced downtime by 25% with tech solutions.</p>
+        <p style="font-size: 16px;"><strong>Tax Online (2023-2024):</strong> Saved over 100 hours with automation.</p>
+        <p style="font-size: 16px;"><strong>Arda Technology (2025):</strong> Kept websites running at 99.9% uptime.</p>
+        <h2 style="font-size: 30px; color: #FFD700;">Contact</h2>
+        <p style="font-size: 16px;">Phone: +989210248214</p>
+        <p style="font-size: 16px;">Email: ariyan.hosseini1384@gmail.com</p>
+        <p style="font-size: 16px;">Location: Iran, Shiraz</p>
+    </div>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top"><i data-feather="chevron-up"></i></a>
+
+    <!-- Scripts -->
+    <script>
+        feather.replace();
+
+        // Particles for Dark Mode
+        particlesJS('particles-dark', {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#FFD700", "#00FFFF"] },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#FFD700", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "repulse": { "distance": 100, "duration": 0.4 }, "push": { "particles_nb": 4 } }
+            },
+            "retina_detect": true
+        });
+
+        // Particles for Light Mode
+        particlesJS('particles-light', {
+            "particles": {
+                "number": { "value": 120, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#FFFACD", "#ADD8E6"] },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.6, "random": true },
+                "size": { "value": 4, "random": true },
+                "line_linked": { "enable": true, "distance": 120, "color": "#FFD700", "opacity": 0.3, "width": 1.5 },
+                "move": { "enable": true, "speed": 3, "direction": "none", "random": true, "straight": false, "out_mode": "out" }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 150, "line_linked": { "opacity": 0.5 } }, "push": { "particles_nb": 4 } }
+            },
+            "retina_detect": true
+        });
+
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => document.getElementById('loader').classList.add('hidden'), 2000);
+        });
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            const icon = themeToggle.querySelector('i');
+            if (body.classList.contains('light-mode')) {
+                icon.setAttribute('data-feather', 'sun');
+            } else {
+                icon.setAttribute('data-feather', 'moon');
+            }
+            feather.replace();
+        });
+
+        const nav = document.querySelector('.nav');
+        const backToTop = document.querySelector('.back-to-top');
+        const sections = document.querySelectorAll('.section');
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        const skillCards = document.querySelectorAll('.skill-card');
+
+        // Intersection Observer for Scroll Effect
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.2 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+        timelineItems.forEach(item => observer.observe(item));
+        skillCards.forEach(card => observer.observe(card));
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+
+            if (window.scrollY > 300) backToTop.classList.add('visible');
+            else backToTop.classList.remove('visible');
+        });
+
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Resume Popup and Download
+        $(document).ready(function() {
+            $('.cta-btn').click(function() { $('html, body').animate({ scrollTop: $('#contact').offset().top }, 1500); });
+            const overlay = $('#overlay');
+            const resumePopup = $('#resumePopup');
+            const closePopup = $('#closePopup');
+
+            $('.downloadBtn').click(async function(e) {
+                e.preventDefault();
+                overlay.fadeIn();
+                resumePopup.fadeIn();
+
+                try {
+                    // Generate PDF from specific content
+                    const element = document.getElementById('pdf-content');
+                    const opt = {
+                        margin: [10, 10, 10, 10],
+                        filename: 'Ariyan_Hosseini_Resume.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    };
+                    await html2pdf().set(opt).from(element).save();
+                } catch (error) {
+                    console.error('PDF Generation Error:', error);
+                    alert('Error generating PDF. Please try again.');
+                }
+            });
+
+            closePopup.click(function() {
+                overlay.fadeOut();
+                resumePopup.fadeOut();
+            });
+
+            overlay.click(function() {
+                overlay.fadeOut();
+                resumePopup.fadeOut();
+            });
+        });
+    </script>
+</body>
+</html>
+
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+        font-family: 'Orbitron', sans-serif; 
+        background: #0a0a0a; 
+        color: #fff; 
+        line-height: 1.6; 
+        overflow-x: hidden; 
+        position: relative; 
+        transition: background 0.5s ease, color 0.5s ease; 
+    }
+    body.light-mode { 
+        background: #FFFFFF; /* سفید خالص */
+        color: #333; 
+    }
+    
+    /* تغییرات جدید برای ذرات پس‌زمینه */
+    #particles-dark, #particles-light { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%; 
+        z-index: -1; 
+    }
+    #particles-dark { display: block; }
+    #particles-light { display: none; }
+    body.light-mode #particles-dark { display: none; }
+    body.light-mode #particles-light { display: block; }
+    
+    /* افکت‌های جدید برای لوگو */
+    .nav .space-logo {
+        background: radial-gradient(circle, #FFD700 30%, #00FFFF 60%, #FF1493 90%);
+        box-shadow: 0 0 35px rgba(255, 215, 0, 0.7), 0 0 25px rgba(255, 20, 147, 0.5);
+        animation: spin 8s linear infinite, pulse 3s ease-in-out infinite alternate;
+    }
+    
+    /* افکت نئون برای لینک‌های منو */
+    .nav a {
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        position: relative;
+        transition: all 0.4s ease;
+    }
+    
+    .nav a:hover {
+        color: #FF1493;
+        text-shadow: 0 0 15px #FF1493, 0 0 25px rgba(255, 20, 147, 0.5);
+    }
+    
+    .nav a::after {
+        background: linear-gradient(90deg, #FFD700, #00FFFF, #FF1493);
+        height: 3px;
+        border-radius: 3px;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+    
+    /* افکت‌های متحرک برای عنوان اصلی */
+    .header-content h1 {
+        text-shadow: 0 0 40px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 20, 147, 0.5);
+        letter-spacing: 2px;
+        animation: wave 4s infinite, gradient-shift 8s ease infinite;
+    }
+    
+    /* افکت‌های جدید برای کارت‌های مهارت */
+    .skill-card {
+        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        border: 2px solid transparent;
+        background: rgba(30, 30, 30, 0.9);
+        background-image: linear-gradient(rgba(30, 30, 30, 0.9), rgba(30, 30, 30, 0.9)), 
+                          linear-gradient(135deg, rgba(255, 215, 0, 0.5), rgba(0, 255, 255, 0.5), rgba(255, 20, 147, 0.5));
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+    }
+    
+    body.light-mode .skill-card {
+        background: rgba(255, 255, 255, 0.9);
+        background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                          linear-gradient(135deg, rgba(255, 215, 0, 0.5), rgba(0, 255, 255, 0.5), rgba(255, 20, 147, 0.5));
+    }
+    
+    .skill-card:hover {
+        transform: perspective(1000px) rotateX(10deg) rotateY(10deg) translateY(-15px) scale(1.05);
+        box-shadow: 0 30px 70px rgba(0, 255, 255, 0.6), 0 0 30px rgba(255, 20, 147, 0.6);
+    }
+    
+    .skill-card h3 {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .skill-card h3::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 3px;
+        bottom: -8px;
+        left: 50%;
+        background: linear-gradient(90deg, #FFD700, #00FFFF, #FF1493);
+        transition: width 0.4s ease, left 0.4s ease;
+        transform: translateX(-50%);
+    }
+    
+    .skill-card:hover h3::after {
+        width: 100%;
+    }
+    
+    /* افکت‌های جدید برای نوار پیشرفت */
+    .skill-card .progress {
+        height: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        margin-top: 20px;
+    }
+    
+    .skill-card .progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #FFD700, #00FFFF, #FF1493);
+        background-size: 200% 100%;
+        animation: progressFill 2s ease forwards, gradient-shift 4s ease infinite;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(255, 20, 147, 0.5);
+    }
+    
+    /* افکت‌های جدید برای کارت‌های تایم‌لاین */
+    .timeline-item .card {
+        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        border: 2px solid transparent;
+        background: rgba(30, 30, 30, 0.9);
+        background-image: linear-gradient(rgba(30, 30, 30, 0.9), rgba(30, 30, 30, 0.9)), 
+                          linear-gradient(135deg, rgba(255, 215, 0, 0.5), rgba(0, 255, 255, 0.5), rgba(255, 20, 147, 0.5));
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+    }
+    
+    body.light-mode .timeline-item .card {
+        background: rgba(255, 255, 255, 0.9);
+        background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                          linear-gradient(135deg, rgba(255, 215, 0, 0.5), rgba(0, 255, 255, 0.5), rgba(255, 20, 147, 0.5));
+    }
+    
+    .timeline-item .card:hover {
+        transform: translateY(-15px) scale(1.03) rotate(1deg);
+        box-shadow: 0 30px 70px rgba(0, 255, 255, 0.5), 0 0 30px rgba(255, 20, 147, 0.3);
+    }
+    
+    /* افکت‌های جدید برای دکمه‌ها */
+    .cta-btn {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        transition: all 0.5s ease;
+    }
+    
+    .cta-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #FF1493, #00FFFF, #FFD700);
+        background-size: 200% 200%;
+        animation: gradient-shift 4s ease infinite;
+        z-index: -1;
+        transition: all 0.5s ease;
+        opacity: 0;
+        border-radius: 50px;
+    }
+    
+    .cta-btn:hover::before {
+        opacity: 1;
+    }
+    
+    .cta-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 50px rgba(255, 20, 147, 0.7);
+        letter-spacing: 2px;
+    }
+    
+    /* انیمیشن‌های جدید */
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+        100% { transform: translateY(0px); }
+    }
+    
+    @keyframes glow {
+        0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+        50% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.7), 0 0 60px rgba(255, 20, 147, 0.4); }
+        100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+    }
+    
+    /* افکت‌های جدید برای فوتر */
+    .footer {
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(15px);
+        border-top: 3px solid transparent;
+        border-image: linear-gradient(90deg, #FFD700, #00FFFF, #FF1493);
+        border-image-slice: 1;
+    }
+    
+    body.light-mode .footer {
+        background: rgba(255, 255, 255, 0.95);
+    }
+    
+    .footer a:hover {
+        color: #FF1493;
+        transform: translateX(10px);
+        text-shadow: 0 0 20px rgba(255, 20, 147, 0.6);
+    }
+    
+    .footer .qr-code img {
+        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        border: 3px solid transparent;
+        background-image: linear-gradient(white, white), 
+                          linear-gradient(135deg, #FFD700, #00FFFF, #FF1493);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+    }
+    
+    .footer .qr-code img:hover {
+        transform: scale(1.15) rotate(5deg);
+        box-shadow: 0 30px 70px rgba(0, 255, 255, 0.5), 0 0 30px rgba(255, 20, 147, 0.3);
+    }
+    
+    /* استایل جدید برای لودر */
+    .loader-text {
+        font-size: 2.5em;
+        font-weight: 900;
+        background: linear-gradient(135deg, #FFD700, #00FFFF, #FF1493);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 200% 200%;
+        animation: pulse 1.8s infinite, gradient-shift 4s ease infinite;
+        text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    }
+    
+    /* استایل جدید برای پاپ‌آپ رزومه */
+    .resume-popup {
+        background: rgba(30, 30, 30, 0.95);
+        backdrop-filter: blur(20px);
+        border: 3px solid transparent;
+        border-radius: 20px;
+        background-image: linear-gradient(rgba(30, 30, 30, 0.95), rgba(30, 30, 30, 0.95)), 
+                          linear-gradient(135deg, #FFD700, #00FFFF, #FF1493);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        box-shadow: 0 0 50px rgba(255, 20, 147, 0.5);
+    }
+    
+    body.light-mode .resume-popup {
+        background: rgba(255, 255, 255, 0.95);
+        background-image: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)), 
+                          linear-gradient(135deg, #FFD700, #00FFFF, #FF1493);
+    }
+</style>
